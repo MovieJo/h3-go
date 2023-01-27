@@ -42,52 +42,53 @@ badexit () {
 
 cleanup () {
     echo "Cleaning up!"
-    rm -rf "$H3_SRC_DIR"
+    rm -rf "$H3_TMP_SRC_DIR"
 }
 trap cleanup EXIT
 
 GIT_REMOTE=${1:-"https://github.com/uber/h3.git"}
-H3_SRC_DIR="src"
+H3_TMP_SRC_DIR="temp"
+H3_SRC_DIR="h3"
 
 # hold onto the current working directory to copy source files into.
 CWD=$(pwd)
 
-# clean up existing C source code.
-find . -name "*.c" -depth 1 -exec rm {} \;
-# clean up existing C headers.
-find . -name "*.h" -depth 1 -exec rm {} \;
+# clean up existing C source codes and headers.
+echo Clean up existing C srouce codes and headers at "$H3_SRC_DIR"
+rm -rf "$H3_SRC_DIR"
+mkdir -p "$H3_SRC_DIR"
 
 echo Downloading H3 from "$GIT_REMOTE"
 
-if  [ -d "$H3_SRC_DIR" ]; then
-    echo Replacing existing src at "$H3_SRC_DIR"
-    rm -rf "$H3_SRC_DIR"
+if  [ -d "$H3_TMP_SRC_DIR" ]; then
+    echo Replacing existing src at "$H3_TMP_SRC_DIR"
+    rm -rf "$H3_TMP_SRC_DIR"
 fi
 
 H3_VERSION=$(< H3_VERSION)
 echo "Checking out $H3_VERSION (found in file H3_VERSION)"
 
-git clone "$GIT_REMOTE" "$H3_SRC_DIR"
+git clone "$GIT_REMOTE" "$H3_TMP_SRC_DIR"
 
-pushd "$H3_SRC_DIR" || badexit
+pushd "$H3_TMP_SRC_DIR" || badexit
     git checkout -q tags/"$H3_VERSION"
 
     echo Copying source files into working directory
     pushd ./src/h3lib/lib/ || badexit
         for f in *.c; do
-            sed -E 's/#include "(.*)"/#include "h3_\1"/; s/#include <faceijk.h>/ /' "$f" > "$CWD/h3_$f" || badexit
+            sed -E 's/#include "(.*)"/#include "\1"/; s/#include <faceijk.h>/ /' "$f" > "$CWD/$H3_SRC_DIR/$f" || badexit
         done
     popd || badexit
 
     echo Copying header files into working directory
     pushd ./src/h3lib/include/ || badexit
         for f in *.h; do
-            sed -E 's/#include "(.*)"/#include "h3_\1"/' "$f" > "$CWD/h3_$f" || badexit
+            sed -E 's/#include "(.*)"/#include "\1"/' "$f" > "$CWD/$H3_SRC_DIR/$f" || badexit
         done
     popd || badexit
 
     echo Copying api header file into working directory
     pushd ./src/h3lib/include/ || badexit
-        sed -E 's/#include "(.*)"/#include "h3_\1"/' "h3api.h.in" > "$CWD/h3_h3api.h" || badexit
+        sed -E 's/#include "(.*)"/#include "\1"/' "h3api.h.in" > "$CWD/$H3_SRC_DIR/h3api.h" || badexit
     popd || badexit
 popd || badexit

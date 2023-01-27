@@ -23,8 +23,8 @@ package h3
 #cgo CFLAGS: -DH3_HAVE_VLA=1
 #cgo LDFLAGS: -lm
 #include <stdlib.h>
-#include <h3_h3api.h>
-#include <h3_h3Index.h>
+#include <h3/h3api.h>
+#include <h3/h3Index.h>
 */
 import "C"
 import (
