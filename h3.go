@@ -23,8 +23,30 @@ package h3
 #cgo CFLAGS: -DH3_HAVE_VLA=1
 #cgo LDFLAGS: -lm
 #include <stdlib.h>
-#include <h3/h3api.h>
-#include <h3/h3Index.h>
+#include "h3/h3api.h"
+#include "h3/h3Index.h"
+
+#include "h3/algos.c"
+#include "h3/faceijk.c"
+#include "h3/localij.c"
+#include "h3/vertex.c"
+
+#include "h3/baseCells.c"
+#include "h3/h3Index.c"
+#include "h3/mathExtensions.c"
+#include "h3/vertexGraph.c"
+
+#include "h3/bbox.c"
+#include "h3/iterators.c"
+#include "h3/polygon.c"
+
+#include "h3/coordijk.c"
+#include "h3/latLng.c"
+#include "h3/vec2d.c"
+
+#include "h3/directedEdge.c"
+#include "h3/linkedGeo.c"
+#include "h3/vec3d.c"
 */
 import "C"
 import (

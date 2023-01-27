@@ -44,6 +44,8 @@
 #define MAX_ONE_RING_SIZE 7
 #define POLYGON_TO_CELLS_BUFFER 12
 
+#ifndef STATIC_CONST_DIRECTIONS
+#define STATIC_CONST_DIRECTIONS
 /**
  * Directions used for traversing a hexagonal ring counterclockwise around
  * {1, 0, 0}
@@ -61,6 +63,7 @@
 static const Direction DIRECTIONS[6] = {J_AXES_DIGIT, JK_AXES_DIGIT,
                                         K_AXES_DIGIT, IK_AXES_DIGIT,
                                         I_AXES_DIGIT, IJ_AXES_DIGIT};
+#endif
 
 /**
  * Direction used for traversing to the next outward hexagonal ring.

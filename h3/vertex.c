@@ -184,10 +184,13 @@ Direction directionForVertexNum(const H3Index origin, const int vertexNum) {
                                             NUM_HEX_VERTS];
 }
 
+#ifndef STATIC_CONST_DIRECTIONS
+#define STATIC_CONST_DIRECTIONS
 /** @brief Directions in CCW order */
 static const Direction DIRECTIONS[NUM_HEX_VERTS] = {
     J_AXES_DIGIT,  JK_AXES_DIGIT, K_AXES_DIGIT,
     IK_AXES_DIGIT, I_AXES_DIGIT,  IJ_AXES_DIGIT};
+#endif
 
 /** @brief Reverse direction from neighbor in each direction,
  *         given as an index into DIRECTIONS to facilitate rotation
